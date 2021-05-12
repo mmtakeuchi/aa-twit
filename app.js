@@ -14,8 +14,8 @@ mongoose
   .then(() => console.log("Connected to MongoDB successfully"))
   .catch((err) => console.log(err));
 
-app.listen(port, () => console.log(`Server is running on port ${port}`));
 app.get("/", (req, res) => res.send("Nodemon is working"));
+app.listen(port, () => console.log(`Server is running on port ${port}`));
 app.use("/api/users", users);
 app.use("/api/tweets", tweets);
 

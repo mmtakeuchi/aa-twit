@@ -3,11 +3,27 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const keys = require("../../config/keys");
+const passport = require("passport");
 
 const User = require("../../models/User");
 
+// TEST
 router.get("/test", (req, res) => res.json({ msg: "This is the users route" }));
 
+// CURRENT
+router.get(
+  "/current",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    res.json({
+      id: req.user.id,
+      handle: req.user.handle,
+      email: req.user.email,
+    });
+  }
+);
+
+// REGISTER
 router.post("/register", (req, res) => {
   User.findOne({ handle: req.body.handle }).then((user) => {
     if (user) {
@@ -48,6 +64,7 @@ router.post("/register", (req, res) => {
   });
 });
 
+// LOGIN
 router.post("/login", (req, res) => {
   const handle = req.body.handle;
   const password = req.body.password;

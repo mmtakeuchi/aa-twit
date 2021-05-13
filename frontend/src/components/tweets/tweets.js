@@ -25,7 +25,9 @@ class Tweet extends React.Component {
     } else {
       return (
         <div>
-          <h2>All Tweets</h2>
+          <h2>
+            <em>All Tweets</em>
+          </h2>
           {this.state.tweets.map((tweet) => (
             <TweetBox key={tweet._id} text={tweet.text} />
           ))}

@@ -6,6 +6,7 @@ const passport = require("passport");
 const Tweet = require("../../models/Tweet");
 const validateTweetInput = require("../../validation/tweets");
 
+// GET TWEETS
 router.get("/", (req, res) => {
   Tweet.find()
     .sort({ date: -1 })
@@ -13,14 +14,17 @@ router.get("/", (req, res) => {
     .catch((err) => res.status(404).json({ notweetsfound: "No tweets found" }));
 });
 
+// GET USER TWEETS
 router.get("/user/:user_id", (req, res) => {
   Tweet.find({ user: req.params.user_id })
+    .sort({ date: -1 })
     .then((tweets) => res.json(tweets))
     .catch((err) =>
       res.status(404).json({ notweetsfound: "No tweets found from that user" })
     );
 });
 
+// GET SINGLE TWEET
 router.get("/:id", (req, res) => {
   Tweet.findById(req.params.id)
     .then((tweet) => res.json(tweet))
@@ -29,6 +33,7 @@ router.get("/:id", (req, res) => {
     );
 });
 
+// POST NEW TWEET
 router.post(
   "/",
   passport.authenticate("jwt", { session: false }),

@@ -1,8 +1,9 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const db = require("./config/keys").mongoURI;
+const db = require("./config/keys_dev").mongoURI;
 const passport = require("passport");
+const path = require("path");
 
 const users = require("./routes/api/users");
 const tweets = require("./routes/api/tweets");
@@ -20,7 +21,12 @@ require("./config/passport")(passport);
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-app.get("/", (req, res) => res.send("Nodemon is working"));
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("frontend/build"));
+  app.get("/", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"));
+  });
+}
 app.use("/api/users", users);
 app.use("/api/tweets", tweets);
 
